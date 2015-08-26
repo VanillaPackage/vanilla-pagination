@@ -297,4 +297,202 @@ class PaginationTest extends PHPUnit_Framework_TestCase
         $pagination->setCurrentPage(10);
         static::assertSame([ 3, 4, 5, 6, 7, 8, 9, 10 ], $pagination->getNearPagesIterator(8)->getArrayCopy());
     }
+
+    /**
+     * Test getInnerPagesIterator.
+     * @covers Rentalhost\VanillaPagination\Pagination::getInnerPagesIterator
+     */
+    public function testGetInnerPagesIterator()
+    {
+        $pagination = new Pagination(0, 20);
+        static::assertSame([ ], $pagination->getInnerPagesIterator(5)->getArrayCopy());
+
+        $pagination = new Pagination(1, 20);
+        static::assertSame([ 1 ], $pagination->getInnerPagesIterator(3)->getArrayCopy());
+
+        $pagination = new Pagination(50, 20);
+
+        $pagination->setCurrentPage(1);
+        static::assertSame([ 1, 2, 3 ], $pagination->getInnerPagesIterator(3)->getArrayCopy());
+
+        $pagination->setCurrentPage(2);
+        static::assertSame([ 1, 2, 3 ], $pagination->getInnerPagesIterator(3)->getArrayCopy());
+
+        $pagination->setCurrentPage(3);
+        static::assertSame([ 1, 2, 3 ], $pagination->getInnerPagesIterator(3)->getArrayCopy());
+
+        $pagination = new Pagination(60, 20);
+
+        $pagination->setCurrentPage(1);
+        static::assertSame([ 1, 2, 3 ], $pagination->getInnerPagesIterator(4)->getArrayCopy());
+
+        $pagination->setCurrentPage(2);
+        static::assertSame([ 1, 2, 3 ], $pagination->getInnerPagesIterator(4)->getArrayCopy());
+
+        $pagination->setCurrentPage(3);
+        static::assertSame([ 1, 2, 3 ], $pagination->getInnerPagesIterator(4)->getArrayCopy());
+
+        $pagination = new Pagination(80, 20);
+        $pagination->setCurrentPage(1);
+
+        static::assertSame([ 1, 2, 3, 4 ], $pagination->getInnerPagesIterator(4)->getArrayCopy());
+
+        $pagination = new Pagination(100, 20);
+
+        // Forcing minimum of 7 pages to this type of iterator.
+        $pagination->setCurrentPage(1);
+        static::assertSame([ 1, 2, 3, 4, 5 ], $pagination->getInnerPagesIterator(4)->getArrayCopy());
+
+        $pagination = new Pagination(200, 20);
+
+        $pagination->setCurrentPage(1);
+        static::assertSame([ 1, 2, 3, 4, 5, null, 10 ], $pagination->getInnerPagesIterator(7)->getArrayCopy());
+
+        $pagination->setCurrentPage(2);
+        static::assertSame([ 1, 2, 3, 4, 5, null, 10 ], $pagination->getInnerPagesIterator(7)->getArrayCopy());
+
+        $pagination->setCurrentPage(3);
+        static::assertSame([ 1, 2, 3, 4, 5, null, 10 ], $pagination->getInnerPagesIterator(7)->getArrayCopy());
+
+        $pagination->setCurrentPage(4);
+        static::assertSame([ 1, 2, 3, 4, 5, null, 10 ], $pagination->getInnerPagesIterator(7)->getArrayCopy());
+
+        $pagination->setCurrentPage(5);
+        static::assertSame([ 1, null, 4, 5, 6, null, 10 ], $pagination->getInnerPagesIterator(7)->getArrayCopy());
+
+        $pagination->setCurrentPage(6);
+        static::assertSame([ 1, null, 5, 6, 7, null, 10 ], $pagination->getInnerPagesIterator(7)->getArrayCopy());
+
+        $pagination->setCurrentPage(7);
+        static::assertSame([ 1, null, 6, 7, 8, 9, 10 ], $pagination->getInnerPagesIterator(7)->getArrayCopy());
+
+        $pagination->setCurrentPage(8);
+        static::assertSame([ 1, null, 6, 7, 8, 9, 10 ], $pagination->getInnerPagesIterator(7)->getArrayCopy());
+
+        $pagination->setCurrentPage(9);
+        static::assertSame([ 1, null, 6, 7, 8, 9, 10 ], $pagination->getInnerPagesIterator(7)->getArrayCopy());
+
+        $pagination->setCurrentPage(10);
+        static::assertSame([ 1, null, 6, 7, 8, 9, 10 ], $pagination->getInnerPagesIterator(7)->getArrayCopy());
+
+        $pagination->setCurrentPage(1);
+        static::assertSame([ 1, 2, 3, 4, 5, 6, null, 10 ], $pagination->getInnerPagesIterator(8)->getArrayCopy());
+
+        $pagination->setCurrentPage(2);
+        static::assertSame([ 1, 2, 3, 4, 5, 6, null, 10 ], $pagination->getInnerPagesIterator(8)->getArrayCopy());
+
+        $pagination->setCurrentPage(3);
+        static::assertSame([ 1, 2, 3, 4, 5, 6, null, 10 ], $pagination->getInnerPagesIterator(8)->getArrayCopy());
+
+        $pagination->setCurrentPage(4);
+        static::assertSame([ 1, 2, 3, 4, 5, 6, null, 10 ], $pagination->getInnerPagesIterator(8)->getArrayCopy());
+
+        $pagination->setCurrentPage(5);
+        static::assertSame([ 1, null, 4, 5, 6, 7, null, 10 ], $pagination->getInnerPagesIterator(8)->getArrayCopy());
+
+        $pagination->setCurrentPage(6);
+        static::assertSame([ 1, null, 5, 6, 7, 8, 9, 10 ], $pagination->getInnerPagesIterator(8)->getArrayCopy());
+
+        $pagination->setCurrentPage(7);
+        static::assertSame([ 1, null, 5, 6, 7, 8, 9, 10 ], $pagination->getInnerPagesIterator(8)->getArrayCopy());
+
+        $pagination->setCurrentPage(8);
+        static::assertSame([ 1, null, 5, 6, 7, 8, 9, 10 ], $pagination->getInnerPagesIterator(8)->getArrayCopy());
+
+        $pagination->setCurrentPage(9);
+        static::assertSame([ 1, null, 5, 6, 7, 8, 9, 10 ], $pagination->getInnerPagesIterator(8)->getArrayCopy());
+
+        $pagination->setCurrentPage(10);
+        static::assertSame([ 1, null, 5, 6, 7, 8, 9, 10 ], $pagination->getInnerPagesIterator(8)->getArrayCopy());
+
+        $pagination = new Pagination(400, 20);
+
+        $pagination->setCurrentPage(1);
+        static::assertSame([ 1, 2, 3, 4, 5, 6, 7, '...', 20 ], $pagination->getInnerPagesIterator(9, '...')
+            ->getArrayCopy());
+
+        $pagination->setCurrentPage(5);
+        static::assertSame([ 1, 2, 3, 4, 5, 6, 7, '...', 20 ], $pagination->getInnerPagesIterator(9, '...')
+            ->getArrayCopy());
+
+        $pagination->setCurrentPage(6);
+        static::assertSame([ 1, '...', 4, 5, 6, 7, 8, '...', 20 ], $pagination->getInnerPagesIterator(9, '...')
+            ->getArrayCopy());
+
+        $pagination->setCurrentPage(7);
+        static::assertSame([ 1, '...', 5, 6, 7, 8, 9, '...', 20 ], $pagination->getInnerPagesIterator(9, '...')
+            ->getArrayCopy());
+
+        $pagination->setCurrentPage(14);
+        static::assertSame([ 1, '...', 12, 13, 14, 15, 16, '...', 20 ], $pagination->getInnerPagesIterator(9, '...')
+            ->getArrayCopy());
+
+        $pagination->setCurrentPage(15);
+        static::assertSame([ 1, '...', 13, 14, 15, 16, 17, '...', 20 ], $pagination->getInnerPagesIterator(9, '...')
+            ->getArrayCopy());
+
+        $pagination->setCurrentPage(16);
+        static::assertSame([ 1, '...', 14, 15, 16, 17, 18, 19, 20 ], $pagination->getInnerPagesIterator(9, '...')
+            ->getArrayCopy());
+
+        $pagination = new Pagination(400, 20);
+
+        $pagination->setCurrentPage(1);
+        static::assertSame([ 1, 2, 3, 4, 5, 6, 7, 8, null, 20 ], $pagination->getInnerPagesIterator(10, null)
+            ->getArrayCopy());
+
+        $pagination->setCurrentPage(5);
+        static::assertSame([ 1, 2, 3, 4, 5, 6, 7, 8, null, 20 ], $pagination->getInnerPagesIterator(10, null)
+            ->getArrayCopy());
+
+        $pagination->setCurrentPage(6);
+        static::assertSame([ 1, null, 4, 5, 6, 7, 8, 9, null, 20 ], $pagination->getInnerPagesIterator(10, null)
+            ->getArrayCopy());
+
+        $pagination->setCurrentPage(7);
+        static::assertSame([ 1, null, 5, 6, 7, 8, 9, 10, null, 20 ], $pagination->getInnerPagesIterator(10, null)
+            ->getArrayCopy());
+
+        $pagination->setCurrentPage(13);
+        static::assertSame([ 1, null, 11, 12, 13, 14, 15, 16, null, 20 ], $pagination->getInnerPagesIterator(10, null)
+            ->getArrayCopy());
+
+        $pagination->setCurrentPage(14);
+        static::assertSame([ 1, null, 12, 13, 14, 15, 16, 17, null, 20 ], $pagination->getInnerPagesIterator(10, null)
+            ->getArrayCopy());
+
+        $pagination->setCurrentPage(15);
+        static::assertSame([ 1, null, 13, 14, 15, 16, 17, 18, 19, 20 ], $pagination->getInnerPagesIterator(10, null)
+            ->getArrayCopy());
+
+        $pagination->setCurrentPage(16);
+        static::assertSame([ 1, null, 13, 14, 15, 16, 17, 18, 19, 20 ], $pagination->getInnerPagesIterator(10, null)
+            ->getArrayCopy());
+
+        $pagination = new Pagination(400, 20);
+
+        $pagination->setCurrentPage(1);
+        static::assertSame(
+            [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, null, 20 ],
+            $pagination->getInnerPagesIterator(19, null)->getArrayCopy()
+        );
+
+        $pagination->setCurrentPage(10);
+        static::assertSame(
+            [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, null, 20 ],
+            $pagination->getInnerPagesIterator(19, null)->getArrayCopy()
+        );
+
+        $pagination->setCurrentPage(11);
+        static::assertSame(
+            [ 1, null, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 ],
+            $pagination->getInnerPagesIterator(19, null)->getArrayCopy()
+        );
+
+        $pagination->setCurrentPage(20);
+        static::assertSame(
+            [ 1, null, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 ],
+            $pagination->getInnerPagesIterator(19, null)->getArrayCopy()
+        );
+    }
 }

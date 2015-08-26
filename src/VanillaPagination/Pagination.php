@@ -195,9 +195,9 @@ class Pagination
             return new ArrayIterator;
         }
 
+        // Return all pages if requested pages is over total pages.
         $totalPages = $this->getTotalPages();
         if ($pagesCount >= $totalPages) {
-            // Return all pages if requested pages is over total pages.
             return $this->getPagesIterator();
         }
 
@@ -221,6 +221,66 @@ class Pagination
         }
 
         return new ArrayIterator(range($pageLeft, $pageRight));
+    }
+
+    /**
+     * Get an iterator with inner pages.
+     *
+     * It'll generate a pagination that always include the first and the last page, the center pages will work
+     * similar to self::getNearPagesIterator() function, but will be generated between two spacers.
+     *
+     * @param integer    $pagesCount Number of pages to return (minimum 7).
+     * @param mixed|null $spacer     Spacer to use on side of inner pages.
+     *
+     * @return ArrayIterator
+     */
+    public function getInnerPagesIterator($pagesCount, $spacer = null)
+    {
+        if (!$this->hasPages()) {
+            // Empty pages.
+            return new ArrayIterator;
+        }
+
+        // Consider minimum of 7 pages (first, last, two spacers, two side pages and current page).
+        // Example: [ 1, ..., 5, <6>, 7, ..., 10 ]
+        $pagesCount = max(7, $pagesCount);
+
+        // Return all pages if requested pages is over total pages.
+        $totalPages = $this->getTotalPages();
+        if ($pagesCount >= $totalPages) {
+            return $this->getPagesIterator();
+        }
+
+        // Determines the middle of pagination.
+        $pagesMiddle = $pagesCount / 2;
+        $pagesMiddleStart = (int) ceil($pagesMiddle);
+
+        // If current page is lower or equal than middle-start, returns left complete pages.
+        if ($this->currentPage <= $pagesMiddleStart) {
+            return new ArrayIterator(array_merge(
+                range(1, $pagesCount - $pagesMiddleStart + (int) ceil($pagesMiddle - 2)),
+                [ $spacer, $this->getTotalPages() ]
+            ));
+        }
+
+        // If current page is greater or equal than middle-end, returns right complete pages.
+        $pagesMiddleEnd = $this->getTotalPages() - (int) ( $pagesCount - ceil($pagesMiddle) );
+        if ($this->currentPage >= $pagesMiddleEnd) {
+            return new ArrayIterator(array_merge(
+                [ 1, $spacer ],
+                range($pagesMiddleEnd - (int) ceil($pagesMiddle - 3), $this->getTotalPages())
+            ));
+        }
+
+        // Calculates the most left page and the most right page.
+        $pageLeft = $this->currentPage - (int) ceil($pagesMiddle - 3);
+        $pageRight = $this->currentPage + (int) floor($pagesMiddle - 2);
+
+        return new ArrayIterator(array_merge(
+            [ 1, $spacer ],
+            range($pageLeft, $pageRight),
+            [ $spacer, $this->getTotalPages() ]
+        ));
     }
 
     /**
