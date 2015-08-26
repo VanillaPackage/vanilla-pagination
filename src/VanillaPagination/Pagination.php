@@ -26,6 +26,7 @@ class Pagination
 
     /**
      * Construct a Pagination.
+     *
      * @param integer $totalItems   Total items.
      * @param integer $itemsPerPage Items per page.
      */
@@ -39,9 +40,11 @@ class Pagination
 
     /**
      * Return the value fitted on min and mad values.
+     *
      * @param  integer $value Current value.
      * @param  integer $min   Min value.
      * @param  integer $max   Max value.
+     *
      * @return integer
      */
     private static function getClamp($value, $min, $max)
@@ -52,17 +55,20 @@ class Pagination
     /**
      * Set current page.
      * Will return false if the new page is out of range, and was fitted.
+     *
      * @param integer $currentPage Current page.
+     *
      * @return boolean
      */
     public function setCurrentPage($currentPage)
     {
         if (!$this->hasPages()) {
             $this->currentPage = 0;
+
             return false;
         }
 
-        $currentPage = intval($currentPage);
+        $currentPage = (int) $currentPage;
         $this->currentPage = self::getClamp($currentPage, 1, $this->getTotalPages());
 
         return $currentPage === $this->currentPage;
@@ -72,13 +78,15 @@ class Pagination
      * Set current item.
      * Current page will be calculated over it.
      * Will return false if the item offset is out of range, and was fitted.
+     *
      * @param integer $currentItem Current item index.
+     *
      * @return boolean
      */
     public function setCurrentItem($currentItem)
     {
         $currentItem = self::getClamp($currentItem, 1, $this->totalItems);
-        $this->currentPage = intval(floor(( $currentItem - 1 ) / $this->itemsPerPage)) + 1;
+        $this->currentPage = (int) ( floor(( $currentItem - 1 ) / $this->itemsPerPage) ) + 1;
     }
 
     /**
@@ -108,6 +116,7 @@ class Pagination
 
     /**
      * Redefine the total items.
+     *
      * @param integer $totalItems Total items.
      */
     public function setTotalItems($totalItems)
@@ -129,6 +138,7 @@ class Pagination
 
     /**
      * Redefine the items per page.
+     *
      * @param integer $itemsPerPage Items per page.
      */
     public function setItemsPerPage($itemsPerPage)
@@ -154,11 +164,11 @@ class Pagination
      */
     public function getTotalPages()
     {
-        return intval(ceil($this->totalItems / $this->itemsPerPage));
+        return (int) ceil($this->totalItems / $this->itemsPerPage);
     }
 
     /**
-     * Get an array with all pages.
+     * Get an iterator with all pages.
      * @return ArrayIterator
      */
     public function getPagesIterator()
@@ -172,8 +182,10 @@ class Pagination
     }
 
     /**
-     * Get an array with pages near to current page.
+     * Get an iterator with pages near to current page.
+     *
      * @param  integer $pagesCount Number of pages to return.
+     *
      * @return ArrayIterator
      */
     public function getNearPagesIterator($pagesCount)
@@ -192,18 +204,19 @@ class Pagination
         // Get the middle of pages count (discount the "current page").
         $pagesCountMiddle = ( $pagesCount - 1 ) / 2;
 
-        // Calcualtes the most left page and the most right page.
-        $pageLeft = $this->currentPage - intval(floor($pagesCountMiddle));
-        $pageRight = $this->currentPage + intval(ceil($pagesCountMiddle));
+        // Calculates the most left page and the most right page.
+        $pageLeft = $this->currentPage - (int) floor($pagesCountMiddle);
+        $pageRight = $this->currentPage + (int) ceil($pagesCountMiddle);
 
         if ($pageLeft < 1) {
             // If most left page is less than one, so reset it and add the excess to most right page.
-            $pageRight+= abs($pageLeft) + 1;
+            $pageRight += abs($pageLeft) + 1;
             $pageLeft = 1;
-        } elseif ($pageRight > $totalPages) {
+        }
+        elseif ($pageRight > $totalPages) {
             // If most right page is greater than total pages, so limit it to total pages
             // and reduce the excess on most left page.
-            $pageLeft-= $pageRight - $totalPages;
+            $pageLeft -= $pageRight - $totalPages;
             $pageRight = $totalPages;
         }
 
@@ -212,7 +225,10 @@ class Pagination
 
     /**
      * Returns true if page exists.
-     * @return boolean
+     *
+     * @param $page
+     *
+     * @return bool
      */
     public function hasPage($page)
     {

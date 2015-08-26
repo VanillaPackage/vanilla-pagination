@@ -20,6 +20,7 @@ class PaginationOffset
 
     /**
      * Construct the PaginationOffset instance.
+     *
      * @param integer $firstItem First item offset.
      * @param integer $lastItem  Last item offset.
      */
@@ -36,7 +37,8 @@ class PaginationOffset
     public function getIterator()
     {
         if ($this->firstItem === 0 &&
-            $this->lastItem === 0) {
+            $this->lastItem === 0
+        ) {
             return new ArrayIterator;
         }
 
@@ -50,7 +52,8 @@ class PaginationOffset
     public function countItems()
     {
         if ($this->firstItem === 0 &&
-            $this->lastItem === 0) {
+            $this->lastItem === 0
+        ) {
             return 0;
         }
 

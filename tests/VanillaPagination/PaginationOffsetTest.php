@@ -30,7 +30,7 @@ class PaginationOffsetTest extends PHPUnit_Framework_TestCase
     public function testGetIterator()
     {
         $paginationOffset = new PaginationOffset(0, 0);
-        $this->assertSame([], $paginationOffset->getIterator()->getArrayCopy());
+        $this->assertSame([ ], $paginationOffset->getIterator()->getArrayCopy());
 
         $paginationOffset = new PaginationOffset(1, 1);
         $this->assertSame([ 1 ], $paginationOffset->getIterator()->getArrayCopy());
