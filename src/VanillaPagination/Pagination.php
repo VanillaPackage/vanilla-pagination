@@ -4,6 +4,10 @@ namespace Rentalhost\VanillaPagination;
 
 use ArrayIterator;
 
+/**
+ * Class Pagination
+ * @package Rentalhost\VanillaPagination
+ */
 class Pagination
 {
     /**

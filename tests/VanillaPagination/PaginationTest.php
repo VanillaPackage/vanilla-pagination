@@ -4,6 +4,10 @@ namespace Rentalhost\VanillaPagination;
 
 use PHPUnit_Framework_TestCase;
 
+/**
+ * Class PaginationTest
+ * @package Rentalhost\VanillaPagination
+ */
 class PaginationTest extends PHPUnit_Framework_TestCase
 {
     /**

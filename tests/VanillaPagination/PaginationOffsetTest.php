@@ -4,6 +4,10 @@ namespace Rentalhost\VanillaPagination;
 
 use PHPUnit_Framework_TestCase;
 
+/**
+ * Class PaginationOffsetTest
+ * @package Rentalhost\VanillaPagination
+ */
 class PaginationOffsetTest extends PHPUnit_Framework_TestCase
 {
     /**
@@ -14,13 +18,13 @@ class PaginationOffsetTest extends PHPUnit_Framework_TestCase
     public function testBasic()
     {
         $paginationOffset = new PaginationOffset(0, 0);
-        $this->assertSame(0, $paginationOffset->countItems());
+        static::assertSame(0, $paginationOffset->countItems());
 
         $paginationOffset = new PaginationOffset(1, 1);
-        $this->assertSame(1, $paginationOffset->countItems());
+        static::assertSame(1, $paginationOffset->countItems());
 
         $paginationOffset = new PaginationOffset(1, 20);
-        $this->assertSame(20, $paginationOffset->countItems());
+        static::assertSame(20, $paginationOffset->countItems());
     }
 
     /**
@@ -30,12 +34,12 @@ class PaginationOffsetTest extends PHPUnit_Framework_TestCase
     public function testGetIterator()
     {
         $paginationOffset = new PaginationOffset(0, 0);
-        $this->assertSame([ ], $paginationOffset->getIterator()->getArrayCopy());
+        static::assertSame([ ], $paginationOffset->getIterator()->getArrayCopy());
 
         $paginationOffset = new PaginationOffset(1, 1);
-        $this->assertSame([ 1 ], $paginationOffset->getIterator()->getArrayCopy());
+        static::assertSame([ 1 ], $paginationOffset->getIterator()->getArrayCopy());
 
         $paginationOffset = new PaginationOffset(1, 5);
-        $this->assertSame([ 1, 2, 3, 4, 5 ], $paginationOffset->getIterator()->getArrayCopy());
+        static::assertSame([ 1, 2, 3, 4, 5 ], $paginationOffset->getIterator()->getArrayCopy());
     }
 }
